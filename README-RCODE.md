@@ -72,3 +72,10 @@ For local testing, run the project through VS Code Live Server or `python -m htt
 ### Replacing a resource later
 
 Keep each project ID and JSON structure stable. To update a code sample, edit its entry in `data/code-library.json`; to update a prompt collection, edit the matching entry in `data/prompt-library.json`. The cards, previews, and copy controls read from these data files, so content can be updated without redesigning the catalogue UI.
+
+
+## V1.6 spacing update
+- Added more vertical breathing room around the Free Code and Free Prompt library CTA buttons.
+- Increased section top/bottom padding for Free Code, Free Prompts, and ZonaGreen sections.
+- Added consistent card row gaps so cards do not sit against the cream/navy section boundaries on mobile.
+- Original design, colors, type scale, cards, and navigation remain unchanged.

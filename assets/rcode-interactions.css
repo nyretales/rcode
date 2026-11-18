@@ -1,1 +1,0 @@
-.rcode-visible{opacity:1!important;transform:none!important;animation:rcode-reveal .65s ease both}@keyframes rcode-reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}

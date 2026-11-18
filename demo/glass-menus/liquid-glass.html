@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Mirrored from https://arungpalakka.com/demo/glass-menus/liquid-glass.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:09:43 GMT -->
+<!-- Added by HTTrack --><meta content="text/html;charset=utf-8" http-equiv="content-type"/><!-- /Added by HTTrack -->
+<head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Glass Menus · Liquid Glass — live demo</title><meta content="noindex" name="robots"/>
+<link href="assets/liquid-glass.css" rel="stylesheet"/><script src="assets/liquid-glass.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;color:#fff;background:#0a0d18;min-height:100vh}body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 520px at 12% 12%,#2fd3b5,transparent 62%),radial-gradient(760px 560px at 92% 70%,#2d3dff,transparent 62%),#04161a}
+.wrap{max-width:1160px;margin:0 auto;padding:40px 20px 120px}header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:clamp(30px,5vw,52px);letter-spacing:-.03em;line-height:1}h1 b{color:var(--gu-accent)}.sub{margin:10px 0 0;opacity:.75;max-width:560px;line-height:1.5}
+h2{margin:56px 0 18px;font-size:13px;letter-spacing:.24em;text-transform:uppercase;opacity:.7;font-weight:600}
+.menus{display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:22px}
+.m{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 12px;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);overflow-x:auto}
+.m.tall .stage{min-height:260px;display:flex;align-items:center}.lbl{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:start}
+.img{aspect-ratio:16/10;margin:-22px -22px 18px;border-radius:24px 24px 0 0;background:radial-gradient(700px 520px at 12% 12%,#2fd3b5,transparent 62%),radial-gradient(760px 560px at 92% 70%,#2d3dff,transparent 62%),#04161a}
+@media (max-width:560px){.menus{grid-template-columns:1fr}.m{align-items:flex-start}}
+</style></head><body data-glass="liquid"><div class="wrap">
+<header><div><h1>Glass Menus <b>·</b> Liquid Glass</h1><p class="sub">Clear frosted glass: calm, elegant and readable on any background. Try everything on this page: hover, click, use the keyboard.</p></div><a class="gui-btn gui-btn--clear" href="../../shop.html">← Back to the shop</a></header>
+<h2>6 navigation menus</h2><div class="menus"><div class="m"><div class="lbl">1 · Liquid glass</div><div class="stage"><glass-nav active="0" no-navigate="" variant="lens"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div><div class="m"><div class="lbl">2 · Dark neon lens</div><div class="stage"><glass-nav active="0" no-navigate="" theme="dark" variant="lens"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div><div class="m"><div class="lbl">3 · Bounce</div><div class="stage"><glass-nav active="0" no-navigate="" variant="bounce"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div><div class="m"><div class="lbl">4 · Neon wave</div><div class="stage"><glass-nav active="0" no-navigate="" theme="dark" variant="wave"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div><div class="m"><div class="lbl">5 · Spotlight</div><div class="stage"><glass-nav active="0" no-navigate="" theme="dark" variant="spotlight"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div><div class="m"><div class="lbl">6 · Floating button</div><div class="stage"><glass-nav active="0" no-navigate="" theme="dark" variant="fab"><a data-icon="home" href="#home">Home</a><a data-icon="heart" href="#likes">Likes</a><a data-icon="plus" href="#create">Create</a><a data-icon="user" href="#profile">Profile</a><a data-icon="bell" href="#alerts">Alerts</a></glass-nav></div></div></div>
+<h2>Buttons &amp; controls</h2>
+<div class="row"><glass-cta href="#start">Start a project</glass-cta><button class="gui-btn gui-btn--clear">Clear</button><button class="gui-btn gui-btn--tinted">Tinted</button><button class="gui-btn gui-btn--neon">Neon</button></div>
+<div class="row" style="margin-top:18px"><glass-toggle checked="" label="Notifications"></glass-toggle><span style="opacity:.8">Notifications</span>
+<glass-segmented label="Type" value="video"><button value="design">Design</button><button value="video">Video</button><button value="apps">Apps</button></glass-segmented>
+<glass-chips label="Filters" multiple="" value="ai"><button value="ai">AI</button><button value="film">Film</button><button value="brand">Brand</button><button value="3d">3D</button></glass-chips></div>
+<h2>Cards &amp; overlays</h2>
+<div class="grid3">
+<article class="gui-card"><div class="img"></div><h3>Content card</h3><p>Image, title, text and an action. Opens a modal.</p><button class="gui-btn gui-btn--tinted" data-glass-open="details">Open details</button></article>
+<div class="gui-price gui-price--featured"><h3>Pricing card</h3><div class="gui-amount">€79 <small>one-time</small></div><ul><li>Featured style with glow</li><li>Any list of benefits</li><li>Full-width action</li></ul><button class="gui-btn gui-btn--neon gui-btn--block">Choose plan</button></div>
+<div class="gui-panel"><div class="gui-label">Dashboard panel</div><div class="gui-stat">12 480 <span class="gui-delta">+18%</span></div><div class="gui-bars"><i style="height:40%"></i><i style="height:55%"></i><i style="height:35%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:88%"></i><i style="height:100%"></i></div>
+<div class="row" style="margin-top:18px"><glass-tooltip text="Tooltips work with hover and keyboard"><button class="gui-btn gui-btn--clear">Tooltip</button></glass-tooltip><button class="gui-btn" onclick="showGlassToast('Saved to your library',{from:this})">Show toast</button></div></div>
+</div>
+<glass-modal heading="Glass Menus · Liquid Glass" id="details"><p style="margin:0 0 18px;opacity:.8;line-height:1.5">6 menus, buttons &amp; controls, cards &amp; overlays — HTML, React and a Web Component.</p><button class="gui-btn gui-btn--tinted gui-btn--block">Got it</button></glass-modal>
+</div></body>
+<!-- Mirrored from https://arungpalakka.com/demo/glass-menus/liquid-glass.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:09:44 GMT -->
+</html>

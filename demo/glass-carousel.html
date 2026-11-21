@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<!-- Mirrored from https://arungpalakka.com/demo/glass-carousel.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:09:44 GMT -->
+<!-- Added by HTTrack --><meta content="text/html;charset=utf-8" http-equiv="content-type"/><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Glass Carousel — live demo</title>
+<meta content="noindex" name="robots"/>
+<link href="https://fonts.googleapis.com/" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Inter+Tight:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root { --bg: #07080f; --fg: #f4f5fb; --muted: rgba(244,245,251,.68); --line: rgba(255,255,255,.16); color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .pad { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+
+  /* hero = the carousel itself, its ambient video fills the whole section */
+  glass-carousel.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-top: 0; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: max(14px, env(safe-area-inset-top)); }
+  .brand { font: 700 15px/1 "Inter Tight", Inter, sans-serif; letter-spacing: -.01em; text-decoration: none; opacity: .9 }
+  .back { font-size: 13px; text-decoration: none; padding: 9px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3);
+    background: rgba(20,22,40,.25); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .intro { text-align: center; margin: clamp(18px, 4vh, 40px) auto clamp(10px, 2vh, 18px); max-width: 720px; }
+  .intro h1 { margin: 0; font: 700 clamp(34px, 8vw, 72px)/.95 "Inter Tight", Inter, sans-serif; letter-spacing: -.035em; text-shadow: 0 10px 40px rgba(0,0,0,.35); }
+  .intro p { margin: 12px auto 0; max-width: 46ch; color: var(--muted); font-size: clamp(14px, 3.6vw, 16px); line-height: 1.5; }
+
+  .switch { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 0 auto 4px; }
+  .seg { display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28);
+    background: rgba(20,22,40,.28); backdrop-filter: blur(18px) saturate(170%); -webkit-backdrop-filter: blur(18px) saturate(170%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.3); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .seg button { border: 0; background: transparent; color: inherit; font: 500 13px/1 Inter, sans-serif; padding: 10px 14px; min-height: 38px; border-radius: 999px; cursor: pointer; white-space: nowrap; transition: background .25s, color .25s; }
+  .seg button[aria-checked="true"] { background: rgba(255,255,255,.92); color: #0b0d1a; }
+  .seg button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  @media (max-width: 560px), (max-height: 760px) {
+    glass-carousel.hero { --gc-card-w: min(54vw, 31svh); }
+    .intro { margin: 14px auto 10px; }
+    .intro h1 { font-size: clamp(30px, 9vw, 44px); }
+    .intro p { font-size: 13.5px; margin-top: 8px; }
+    .intro p .long { display: none; }
+    .switch { gap: 6px; }
+    .seg { padding: 3px; }
+    .seg button { padding: 8px 11px; min-height: 34px; font-size: 12.5px; }
+  }
+  @media (max-height: 620px) { .intro p { display: none; } }
+  /* below the fold */
+  section.more { position: relative; padding-top: 56px; padding-bottom: 72px; max-width: 1080px; margin: 0 auto; }
+  section.more h2 { font: 700 clamp(24px, 5vw, 36px)/1.05 "Inter Tight", Inter, sans-serif; letter-spacing: -.02em; margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .tile { border: 1px solid var(--line); border-radius: 22px; padding: 18px; background: rgba(255,255,255,.04); }
+  .tile b { display: block; font-size: 16px; margin-bottom: 6px; }
+  .tile span { color: var(--muted); font-size: 14px; line-height: 1.5; }
+  pre { margin: 28px 0 0; padding: 18px; border-radius: 18px; border: 1px solid var(--line); background: #0d0f1c; overflow-x: auto; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: #cfd3ff; }
+  pre .t { color: #ff8fb6 } pre .a { color: #7fffe0 } pre .s { color: #ffd38a }
+  .note { color: var(--muted); font-size: 13px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<glass-carousel ambient="" autoplay="5200" class="hero" label="Portfolio films" mode="ring">
+<div class="top pad">
+<a class="brand" href="../index.html">R•CODE.studio</a>
+<a class="back" href="../shop.html">← Back to the shop</a>
+</div>
+<div class="intro pad">
+<h1>Glass Carousel</h1>
+<p>Your videos on glass cards, with the background moving along.<span class="long"> Swipe, drag, use the arrows or tap a card to open it.</span></p>
+</div>
+<div class="switch pad">
+<div aria-label="Scene" class="seg" id="scene" role="radiogroup"></div>
+<div aria-label="Layout" class="seg" id="mode" role="radiogroup"></div>
+</div>
+</glass-carousel>
+<section class="more pad">
+<h2>What's inside</h2>
+<div class="grid">
+<div class="tile"><b>4 layouts</b><span>3D ring, coverflow, card stack and fan. Switch with one attribute.</span></div>
+<div class="tile"><b>Video or photo cards</b><span>Only the active video plays, the rest wait on a poster. Light on phones.</span></div>
+<div class="tile"><b>Living background</b><span>The active card's video, blurred behind the glass, changes with every swipe.</span></div>
+<div class="tile"><b>Glass player</b><span>Previous, next, autoplay, like and open. Card opens in a glass window.</span></div>
+<div class="tile"><b>Made for touch</b><span>Swipe with fling, vertical page scroll still works, 44 px touch targets.</span></div>
+<div class="tile"><b>Accessible</b><span>Arrow keys, Home/End, Enter, screen-reader labels, reduced motion respected.</span></div>
+</div>
+<pre><span class="t">&lt;script</span> <span class="a">src</span>=<span class="s">"glass-carousel.min.js"</span> <span class="a">defer</span><span class="t">&gt;&lt;/script&gt;</span>
+
+<span class="t">&lt;glass-carousel</span> <span class="a">mode</span>=<span class="s">"ring"</span> <span class="a">autoplay</span>=<span class="s">"5000"</span> <span class="a">ambient</span><span class="t">&gt;</span>
+  <span class="t">&lt;figure</span> <span class="a">data-meta</span>=<span class="s">"Brand film"</span><span class="t">&gt;</span>
+    <span class="t">&lt;video</span> <span class="a">src</span>=<span class="s">"clip.mp4"</span> <span class="a">poster</span>=<span class="s">"clip.webp"</span> <span class="a">muted loop playsinline</span><span class="t">&gt;&lt;/video&gt;</span>
+    <span class="t">&lt;figcaption&gt;</span>Twin heroines<span class="t">&lt;/figcaption&gt;</span>
+  <span class="t">&lt;/figure&gt;</span>
+  …
+<span class="t">&lt;/glass-carousel&gt;</span></pre>
+<p class="note">Works in plain HTML, React, Webflow, Framer and WordPress. All films on this page are by R•CODE IMAGINATION.</p>
+</section>
+<script type="module">
+import "gc/glass-carousel.demo.min.js";
+const SCENES = {
+  Films: [
+    ["festival", "Night shift", "Festival film · thriller", "A short psychological thriller made for a film festival, shot entirely with AI video."],
+    ["winter", "Winter meeting", "Animated short", "A warm winter story in a 3D animated look: a slip on the ice turns into a meeting."],
+    ["riders", "Chaos in Boots", "E-commerce ad", "A western-style ad for an online clothing shop: riders, dust and sunset."],
+    ["dancer", "Red dress", "Showreel", "A dance in a glass tower — one of the scenes from the R•CODE showreel."],
+    ["leap", "Leap over Paris", "Showreel", "Motion and light over the rooftops of Paris."],
+  ],
+  Fashion: [
+    ["twins", "Twin heroines", "Brand & product film", "Pearls, red glass and two heroines: a jewellery brand film, frame by frame."],
+    ["couture", "Soft light", "Fragrance film", "Perfume is invisible, so the film sells a feeling: warm light and slow movement."],
+    ["sketch", "Endless sketch", "Fashion loop for TikTok", "A dress drawn in ink that never stops moving — a seamless fashion loop."],
+    ["eyewear", "The frame is the mood", "Eyewear campaign", "Close portraits and bold colour for an eyewear brand."],
+    ["red-dress", "Desert couture", "Fashion campaign", "A red dress against warm stone — a campaign without a studio."],
+  ],
+  Brands: [
+    ["paint", "A drop of paint", "AI hook reel", "One second to stop the scroll: paint bursts into a peacock."],
+    ["good-things", "Good things take time", "Brand film concept", "A slow brand film about craft, sun and patience."],
+    ["watch", "Through a watch", "Luxury commercial", "Macro shots of a watch movement, light on metal."],
+    ["city", "Rough 3D to sunset", "Architecture campaign", "From a rough 3D model to a sunset campaign for a new district."],
+  ],
+};
+const MODES = { ring: "Ring", coverflow: "Coverflow", stack: "Stack", fan: "Fan" };
+const gc = document.querySelector("glass-carousel");
+
+function cards(name) {
+  gc.querySelectorAll("figure").forEach((f) => f.remove());
+  for (const [id, title, meta, text] of SCENES[name]) {
+    const f = document.createElement("figure");
+    f.dataset.meta = meta;
+    f.innerHTML = `<video src="gc/${id}.mp4" poster="gc/${id}.webp" muted loop playsinline preload="metadata" aria-label="${title}"></video><figcaption></figcaption><p hidden></p>`;
+    f.querySelector("figcaption").textContent = title;
+    f.querySelector("p").textContent = text;
+    gc.appendChild(f);
+  }
+  gc.setAttribute("aria-label", `${name} — portfolio films`);
+  gc.refresh ? gc.refresh() : customElements.whenDefined("glass-carousel").then(() => gc.refresh());
+}
+function radios(el, options, current, onPick) {
+  el.innerHTML = "";
+  const btns = Object.entries(options).map(([value, label]) => {
+    const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "radio"); b.textContent = label;
+    b.setAttribute("aria-checked", String(value === current)); b.tabIndex = value === current ? 0 : -1;
+    b.onclick = () => { btns.forEach((x) => { x.setAttribute("aria-checked", String(x === b)); x.tabIndex = x === b ? 0 : -1; }); onPick(value); };
+    b.onkeydown = (e) => {
+      const i = btns.indexOf(b), n = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (n) { e.preventDefault(); const t = btns[(i + n + btns.length) % btns.length]; t.focus(); t.click(); }
+    };
+    el.appendChild(b); return b;
+  });
+}
+radios(document.getElementById("scene"), Object.fromEntries(Object.keys(SCENES).map((k) => [k, k])), "Films", cards);
+radios(document.getElementById("mode"), MODES, "ring", (m) => gc.setAttribute("mode", m));
+// first scene: the carousel reads its cards once it is ready
+cards("Films");
+</script>
+</body>
+<!-- Mirrored from https://arungpalakka.com/demo/glass-carousel.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:09:45 GMT -->
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<!-- Mirrored from https://arungpalakka.com/free/glass-nav/demo.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:10:54 GMT -->
+<!-- Added by HTTrack --><meta content="text/html;charset=utf-8" http-equiv="content-type"/><!-- /Added by HTTrack -->
+<head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Liquid Glass Nav</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;min-height:100vh;background:#04161a;color:#fff;display:flex;flex-direction:column;align-items:center;gap:70px;padding:60px 16px 80px;overflow-x:hidden}
+.label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;text-align:center;margin-bottom:16px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.nav{position:relative;display:flex;gap:4px;padding:8px;border-radius:999px;background:rgba(255,255,255,.14);
+ backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);
+ border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 20px 50px rgba(0,0,0,.25);will-change:transform;touch-action:none}
+.nav::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(180px 80px at var(--mx,50%) var(--my,0%),rgba(255,255,255,.3),transparent 70%);opacity:var(--glow,0);transition:opacity .3s}
+.item{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4px;width:84px;padding:10px 0;color:#fff;font-size:12px;font-weight:500;cursor:pointer;user-select:none}
+.item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .35s cubic-bezier(.3,1.6,.5,1),opacity .2s}
+.item.on svg{transform:translateY(-2px) scale(1.12)}
+.lens{position:absolute;z-index:1;top:8px;bottom:8px;left:0;width:84px;border-radius:999px;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,.12));
+ backdrop-filter:blur(4px) brightness(1.15) saturate(190%);-webkit-backdrop-filter:blur(4px) brightness(1.15) saturate(190%);border:1px solid rgba(255,255,255,.45);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),0 6px 18px rgba(0,0,0,.18);will-change:transform}
+.dark .nav,.wave .nav,.spot .nav,.fab .nav{background:rgba(20,22,31,.5);border-color:rgba(255,255,255,.14)}
+.dark .lens{background:linear-gradient(180deg,rgba(120,255,220,.28),rgba(120,255,220,.06));border-color:rgba(140,255,225,.6);box-shadow:0 0 24px rgba(120,255,220,.45),inset 0 1px 1px rgba(255,255,255,.6)}
+/* bounce */
+.bounce .nav{margin-top:80px}
+.bub{position:absolute;z-index:3;width:64px;height:64px;border-radius:50%;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;
+ background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.16));backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);
+ border:1px solid rgba(255,255,255,.65);box-shadow:inset 0 2px 2px rgba(255,255,255,.9),0 14px 28px rgba(0,0,0,.25);will-change:transform}
+.bub svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dot{position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:#fff;left:0;opacity:.9;will-change:transform}
+/* svg outline variants */
+.shape{position:absolute;inset:-40px -2px -2px -2px;pointer-events:none;overflow:visible;z-index:0}
+.wave .nav,.fab .nav{background:none;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.wave .nav::before,.fab .nav::before{display:none}
+.glassfill{position:absolute;inset:0;border-radius:999px;backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);z-index:-1}
+.wave .nav,.fab .nav{margin-top:40px}
+.cone{position:absolute;top:0;left:0;width:120px;height:100%;pointer-events:none;z-index:1;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%);
+ background:linear-gradient(180deg,rgba(120,255,220,.55),rgba(120,255,220,0));will-change:transform}
+.cone::before{content:"";position:absolute;top:0;left:36%;right:36%;height:5px;border-radius:0 0 6px 6px;background:#7fffe0;box-shadow:0 0 14px #7fffe0}
+.fabbtn{position:absolute;z-index:3;width:60px;height:60px;border-radius:50%;pointer-events:none;display:flex;align-items:center;justify-content:center;
+ background:radial-gradient(circle at 50% 30%,#3a7d6e,#173d35);border:1px solid rgba(140,255,225,.5);box-shadow:0 0 22px rgba(120,255,220,.45),inset 0 1px 1px rgba(255,255,255,.5);will-change:transform}
+.fabbtn svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fab .item.under svg,.bounce .item.under svg{opacity:0}
+.note{max-width:540px;text-align:center;font-size:14px;line-height:1.5;background:rgba(0,0,0,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:14px 18px;border-radius:16px}
+@media (max-width:520px){.item{width:60px;font-size:10px}.lens{width:60px}}
+:root{--t:#0ABAB5;--tl:#81D8D0}
+body{
+ background:radial-gradient(900px 700px at 20% 15%,rgba(10,186,181,.28),transparent 60%),radial-gradient(800px 800px at 85% 80%,rgba(129,216,208,.22),transparent 60%),radial-gradient(600px 500px at 70% 35%,rgba(10,120,130,.35),transparent 60%),linear-gradient(160deg,#03181c,#062a2e 50%,#021013)!important;
+ background-attachment:fixed!important}
+body::after{content:"";position:fixed;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:4px 4px;pointer-events:none}
+.note{background:rgba(6,40,44,.55)!important;border:1px solid rgba(129,216,208,.25)}
+.label{color:var(--tl)}
+.nav,.dark .nav,.spot .nav{background:rgba(6,40,44,.5)!important;border-color:rgba(129,216,208,.3)!important;box-shadow:inset 0 1px 0 rgba(129,216,208,.35),0 20px 50px rgba(0,0,0,.45)!important}
+.lens,.dark .lens{background:linear-gradient(180deg,rgba(129,216,208,.45),rgba(10,186,181,.12))!important;border-color:rgba(129,216,208,.8)!important;box-shadow:0 0 22px rgba(10,186,181,.5),inset 0 1px 1px rgba(255,255,255,.7)!important}
+.bub{background:linear-gradient(180deg,rgba(129,216,208,.6),rgba(10,186,181,.2))!important;border-color:rgba(129,216,208,.9)!important;box-shadow:0 0 22px rgba(10,186,181,.55),inset 0 2px 2px rgba(255,255,255,.7)!important}
+.dot{background:var(--tl)!important}
+.shape .f{fill:rgba(6,40,44,.55)!important;stroke:rgba(129,216,208,.3)!important}
+.shape .s{stroke:var(--tl)!important}.shape .g{stroke:var(--t)!important}
+.cone{background:linear-gradient(180deg,rgba(10,186,181,.6),rgba(10,186,181,0))!important}.cone::before{background:var(--tl)!important;box-shadow:0 0 14px var(--t)!important}
+.fabbtn{background:radial-gradient(circle at 50% 30%,#22c9c3,#06615e)!important;border-color:rgba(129,216,208,.8)!important;box-shadow:0 0 24px rgba(10,186,181,.6)!important}
+</style></head><body>
+<p class="note">Hover (or drag a finger) over each bar. Click to make a tab active. Free code by <a href="../../index.html" style="color:#fff">R•CODE.studio</a></p>
+<div class="v" data-t="lens"><div class="label">1 · Liquid glass</div><nav class="nav" data-i="0"></nav></div>
+<div class="v dark" data-t="lens"><div class="label">2 · Dark neon lens</div><nav class="nav" data-i="2"></nav></div>
+<div class="v bounce" data-t="bounce"><div class="label">3 · Bounce </div><nav class="nav" data-i="1"></nav></div>
+<div class="v wave" data-t="wave"><div class="label">4 · Neon wave </div><nav class="nav" data-i="2"></nav></div>
+<div class="v spot" data-t="spot"><div class="label">5 · Spotlight </div><nav class="nav" data-i="2"></nav></div>
+<div class="v fab" data-t="fab"><div class="label">6 · Floating button </div><nav class="nav" data-i="2"></nav></div>
+<script>
+const I={Home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',Likes:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',Create:'<circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/>',Profile:'<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',Alerts:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>'};
+const ico=k=>'<svg viewBox="0 0 24 24">'+I[k]+'</svg>';
+function pill(w,h,r,bx,bw,bh){// rounded pill path with bump (bh>0 up, <0 down) centred at bx
+ const t=0, L=r, R=w-r, a=Math.max(L+bw/2,Math.min(R-bw/2,bx));
+ let top='M'+L+','+t;
+ if(bh){const s=a-bw/2,e=a+bw/2,q=bw*.28;top+=' L'+s+','+t+' C'+(s+q)+','+t+' '+(a-bw*.22)+','+(t-bh)+' '+a+','+(t-bh)+' C'+(a+bw*.22)+','+(t-bh)+' '+(e-q)+','+t+' '+e+','+t;}
+ return top+' L'+R+','+t+' A'+r+','+r+' 0 0 1 '+R+','+h+' L'+L+','+h+' A'+r+','+r+' 0 0 1 '+L+','+t+' Z';}
+document.querySelectorAll('.v').forEach(box=>{
+ const T=box.dataset.t,nav=box.querySelector('.nav');
+ Object.keys(I).forEach(k=>nav.insertAdjacentHTML('beforeend','<a class="item">'+ico(k)+k+'</a>'));
+ const items=[...nav.querySelectorAll('.item')];let act=+nav.dataset.i;
+ const cx=i=>items[i].offsetLeft+items[i].offsetWidth/2;
+ let x=cx(act),v=0,target=x,hover=false,tilt=0,tiltT=0,near=act;
+ const nearest=px=>items.reduce((b,_,j)=>Math.abs(cx(j)-px)<Math.abs(cx(b)-px)?j:b,0);
+ const set=i=>{act=i;items.forEach((e,j)=>e.classList.toggle('on',j===i));};set(act);
+ const pos=e=>{const r=nav.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,w:r.width}};
+ nav.addEventListener('pointermove',e=>{const p=pos(e);hover=true;near=nearest(p.x);target=T==='lens'?Math.max(cx(0),Math.min(cx(items.length-1),p.x)):cx(near);
+  nav.style.setProperty('--mx',p.x+'px');nav.style.setProperty('--my',p.y+'px');nav.style.setProperty('--glow',1);tiltT=(p.x/p.w-.5)*8});
+ const leave=()=>{hover=false;near=act;target=cx(act);tiltT=0;nav.style.setProperty('--glow',0)};
+ nav.addEventListener('pointerleave',leave);
+ nav.addEventListener('pointerdown',e=>nav.setPointerCapture(e.pointerId));
+ nav.addEventListener('pointerup',e=>{set(nearest(pos(e).x));if(e.pointerType!=='mouse')leave();});
+ let draw=()=>{};
+ if(T==='lens'){const lens=document.createElement('div');lens.className='lens';nav.prepend(lens);
+  draw=()=>{const s=Math.min(.45,Math.abs(v)/40);lens.style.transform='translateX('+(x-lens.offsetWidth/2)+'px) scaleX('+(1+s)+') scaleY('+(1-s*.35)+')'};}
+ if(T==='bounce'){// one bubble per item: pops up out of the bar with overshoot, drops back when you leave it
+  const st=items.map((it,j)=>{const b=document.createElement('div');b.className='bub';b.innerHTML=ico(Object.keys(I)[j]);nav.appendChild(b);return{b,y:0,vy:0,s:.5,vs:0}});
+  const dot=document.createElement('div');dot.className='dot';nav.appendChild(dot);
+  draw=()=>{const sel=hover?near:act;st.forEach((o,j)=>{const up=j===sel;const ty=up?-78:0,ts=up?1:.45;
+    o.vy=(o.vy+(ty-o.y)*.11)*.8;o.y+=o.vy;o.vs=(o.vs+(ts-o.s)*.14)*.72;o.s+=o.vs;
+    const sq=Math.max(-.22,Math.min(.22,o.vy/30));const vis=Math.min(1,Math.max(0,-o.y/30));
+    o.b.style.opacity=vis;o.b.style.transform='translate('+(cx(j)-32)+'px,'+(o.y+nav.offsetHeight/2-40)+'px) scale('+(o.s*(1+sq*.6))+','+(o.s*(1-sq))+')';
+    items[j].classList.toggle('under',vis>.35)});
+   dot.style.transform='translateX('+(x-2.5)+'px)'};}
+ if(T==='wave'||T==='fab'){const ns='http://www.w3.org/2000/svg';const g=document.createElement('div');g.className='glassfill';nav.prepend(g);
+  const sv=document.createElementNS(ns,'svg');sv.setAttribute('class','shape');sv.innerHTML='<defs><filter id="gl'+T+'" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs><path class="f" fill="rgba(20,22,31,.55)" stroke="rgba(255,255,255,.18)"/>'+(T==='wave'?'<path class="g" fill="none" stroke="#7fffe0" stroke-width="5" opacity=".6" filter="url(#gl'+T+')"/><path class="s" fill="none" stroke="#9fffe8" stroke-width="2.2"/>':'');
+  nav.prepend(sv);let fb;if(T==='fab'){fb=document.createElement('div');fb.className='fabbtn';nav.appendChild(fb);}
+  let lastK=-1;
+  draw=()=>{const w=nav.offsetWidth,h=nav.offsetHeight;sv.setAttribute('viewBox','-2 -40 '+(w+4)+' '+(h+42));
+   const d=pill(w,h,h/2,x,T==='wave'?120:118,T==='wave'?Math.max(18,30-Math.abs(v)):-34+Math.min(10,Math.abs(v)/2));
+   sv.querySelectorAll('path').forEach(p=>p.setAttribute('d',d));
+   if(T==='wave'){const top=pill(w,h,h/2,x,120,Math.max(18,30-Math.abs(v)));const s=sv.querySelector('.s'),gl=sv.querySelector('.g');[s,gl].forEach(p=>p.setAttribute('d',top))}
+   if(fb){const k=hover?near:act;if(k!==lastK){fb.innerHTML=ico(Object.keys(I)[k]);items.forEach((e,j)=>e.classList.toggle('under',j===k));lastK=k}
+    fb.style.transform='translate('+(x-30)+'px,'+(-30)+'px)'}
+   if(T==='wave')items.forEach((e,j)=>e.style.transform=j===(hover?near:act)?'translateY(-14px)':'');};}
+ if(T==='spot'){const c=document.createElement('div');c.className='cone';nav.prepend(c);
+  draw=()=>{c.style.transform='translateX('+(x-60)+'px)';items.forEach((e,j)=>e.style.filter=j===(hover?near:act)?'drop-shadow(0 0 8px #7fffe0)':'')};}
+ (function loop(){const k=hover?.16:.12,dmp=hover?.72:.68;if(!hover)target=cx(act);v=(v+(target-x)*k)*dmp;x+=v;
+  tilt+=(tiltT-tilt)*.12;if(T==='lens')nav.style.transform='perspective(700px) rotateY('+tilt+'deg)';draw();requestAnimationFrame(loop)})();
+ addEventListener('resize',()=>{target=x=cx(act)});
+});
+</script></body>
+<!-- Mirrored from https://arungpalakka.com/free/glass-nav/demo.html by HTTrack Website Copier/3.x [XR&CO], Wed, 18 Nov 2026 04:10:54 GMT -->
+</html>

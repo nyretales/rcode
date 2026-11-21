@@ -1,1 +1,0 @@
-import{s as e,t}from"link-1nT5MCiw.js";var n=e(),r=()=>(0,n.jsx)(`div`,{className:`flex min-h-screen items-center justify-center bg-background`,children:(0,n.jsx)(t,{to:`/{-$lang}/news`,params:{lang:void 0},className:`font-mono-label hover:text-brand`,children:`← All news`})});export{r as notFoundComponent};

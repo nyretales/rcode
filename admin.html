@@ -48,7 +48,8 @@
         <div class="side-label">CONTENT</div>
         <button class="nav active" data-catalog="code"><span>⌘</span><span><b>Code Library</b><small>HTML · CSS · JS</small></span><em id="sideCode">—</em></button>
         <button class="nav" data-catalog="prompt"><span>✳</span><span><b>Prompt Library</b><small>AI prompt collections</small></span><em id="sidePrompt">—</em></button>
-        <div class="side-note"><b>Autosave: OFF</b><p>Perubahan hanya dikirim ke GitHub ketika tombol Simpan ditekan.</p></div>
+        <button class="nav" data-catalog="site"><span>▣</span><span><b>Gambar Situs</b><small>Placeholder halaman utama</small></span><em id="sideSite">—</em></button>
+        <div class="side-note"><b>Simpan per item</b><p>Tombol "Simpan perubahan" hanya mengirim item yang sedang dibuka, jadi item lain tidak ikut tertimpa. Item baru tampil paling atas.</p></div>
       </aside>
       <section class="content">
         <div class="content-head">
@@ -66,7 +67,7 @@
                 <span class="list-toggle-copy"><span class="list-kicker">CONTENT MANAGER</span><strong>Daftar Konten <small id="listCountLabel">— item</small></strong><em id="listToggleHint">Buka untuk memilih atau mencari item</em></span>
                 <span class="list-chevron" aria-hidden="true">⌄</span>
               </button>
-              <div class="list-tools"><button id="importBtn" class="text-btn" type="button">↑ Import JSON</button><button id="exportBtn" class="text-btn" type="button">↓ Export JSON</button></div><input id="importFile" type="file" accept=".json,application/json" hidden>
+              <div class="list-tools"><button id="importBtn" class="text-btn" type="button">↑ Import JSON</button><button id="exportBtn" class="text-btn" type="button">↓ Export JSON</button><button id="historyBtn" class="text-btn" type="button">⟲ Riwayat</button></div><input id="importFile" type="file" accept=".json,application/json" hidden>
             </div>
             <div id="itemListPanel" class="list-panel hidden">
               <div id="itemList" class="item-list"><div class="empty">Memuat katalog…</div></div>
@@ -83,16 +84,21 @@
               <label>Judul<input id="fTitle" placeholder="Masukkan judul konten"></label>
               <label>Kategori<select id="fCategorySelect"></select></label>
               <label id="newCategoryWrap" class="hidden">Kategori baru<input id="fNewCategory" placeholder="Tulis nama kategori baru"></label>
+              <label>Deskripsi singkat (tampil di kartu)<input id="fDesc" maxlength="220" placeholder="Opsional. Jika kosong dibuat otomatis"></label>
               <div id="codeFields" class="hidden">
                 <label>Isi Code<textarea id="fCodeContent" rows="14" placeholder="Paste kode HTML di sini..."></textarea></label>
                 <label class="upload-source">Atau upload file HTML<input id="codeFileUpload" type="file" accept=".html,.htm,text/html"></label>
+                <label>CSS terpisah (opsional)<textarea id="fCodeCss" rows="8" placeholder="Isi style.css jika CSS tidak berada di dalam HTML"></textarea></label>
+                <label>JavaScript terpisah (opsional)<textarea id="fCodeJs" rows="8" placeholder="Isi script.js jika JS tidak berada di dalam HTML"></textarea></label>
+                <div class="live-box"><div class="live-head"><span>PRATINJAU LANGSUNG</span><button id="previewBtn" class="btn ghost" type="button">▶ Jalankan pratinjau</button></div><iframe id="livePreview" title="Pratinjau kode" sandbox="allow-scripts allow-forms allow-modals" class="hidden"></iframe><p class="editor-tip">Di situs publik, preview dibuat otomatis dari kode ini. Tidak perlu gambar atau video.</p></div>
               </div>
               <div id="promptFields" class="hidden">
+                <p id="multiNote" class="editor-tip hidden"></p>
                 <label>Isi Prompt<textarea id="fPromptContent" rows="14" placeholder="Ketik atau paste isi prompt di sini..."></textarea></label>
               </div>
               <div class="media-box">
-                <div class="section-heading">GAMBAR PREVIEW</div>
-                <p class="editor-tip">Unggah JPG, PNG, atau WebP. Gambar otomatis dikonversi ke WebP.</p>
+                <div class="section-heading" id="mediaHeading">GAMBAR PREVIEW</div>
+                <p class="editor-tip" id="mediaTip">Unggah JPG, PNG, atau WebP. Gambar otomatis dikonversi ke WebP.</p>
                 <input id="mediaFiles" type="file" accept="image/jpeg,image/png,image/webp">
                 <div id="mediaPreview" class="media-preview"></div>
                 <div id="existingMedia" class="existing-media"></div>
@@ -102,7 +108,12 @@
             </div><div class="edit-actions"><button id="deleteBtn" class="btn danger">Hapus item</button><button id="saveItemBtn" class="btn primary">Simpan perubahan</button></div></div>
           </div>
         </div>
-        <div class="bottom-bar"><span id="saveStatus" role="status" aria-live="polite">Terhubung ke CMS API.</span><button id="saveAllBtn" class="btn primary">Simpan seluruh katalog ke GitHub ↗</button></div>
+        <div class="bottom-bar"><span id="saveStatus" role="status" aria-live="polite">Terhubung ke CMS API.</span><button id="saveAllBtn" class="btn ghost" title="Gunakan setelah Import JSON. Untuk edit biasa cukup tombol Simpan perubahan">Terapkan seluruh katalog (setelah import) ↗</button></div>
+      </section>
+      <section class="content hidden" id="sitePanel">
+        <div class="content-head"><div><div class="eyebrow">CATALOG / 03</div><h2>Gambar Situs</h2><p>Unggah gambar untuk setiap slot di halaman utama. Slot yang masih kosong tetap menampilkan placeholder. Gambar otomatis dikonversi ke WebP dan tampil di situs dalam ±1 menit.</p></div></div>
+        <div id="siteGrid" class="site-grid"></div>
+        <input id="siteFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
       </section>
     </div>
     <footer>R•CODE CMS <span>·</span> Changes are committed to the private repository.</footer>

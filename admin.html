@@ -79,8 +79,15 @@
             <div class="edit-head"><div><span class="side-label">EDITOR</span><h3 id="editorTitle">Pilih konten</h3></div><span id="dirtyState" class="saved">Tidak ada perubahan</span></div>
             <div id="editorEmpty" class="editor-empty"><div>✳</div><b>Belum ada item dipilih</b><p>Pilih item di daftar untuk mengedit data JSON-nya, atau buat item baru.</p></div>
             <div id="editorArea" class="hidden"><div class="visual-editor">
-              <div class="form-grid"><label>ID<input id="fId"></label><label>Judul<input id="fTitle"></label><label>Kategori<input id="fCategory"></label><label>Nomor kategori<input id="fCategoryIndex"></label></div>
+              <div class="form-grid"><label class="system-field">ID<input id="fId"></label><label>Judul<input id="fTitle"></label><label>Kategori<select id="fCategorySelect"><option value="">Pilih kategori…</option></select><input id="fCategoryNew" class="hidden" placeholder="Nama kategori baru"></label><label class="system-field">Nomor kategori<input id="fCategoryIndex"></label></div>
               <label id="descriptionLabel">Deskripsi / Ringkasan<textarea id="fDescription" rows="3"></textarea></label>
+              <div id="simpleCodeFields" class="hidden simple-new-fields">
+                <label>Isi Code HTML<textarea id="newCodeContent" rows="14" placeholder="Paste kode HTML di sini…"></textarea></label>
+                <label class="upload-html-label">Atau upload file HTML<input id="htmlFileUpload" type="file" accept=".html,.htm,text/html"></label>
+              </div>
+              <div id="simplePromptFields" class="hidden simple-new-fields">
+                <label>Isi Prompt<textarea id="newPromptContent" rows="12" placeholder="Ketik atau paste isi prompt di sini…"></textarea></label>
+              </div>
               <div id="codeFields" class="hidden"><div class="section-heading">SOURCE CODE FILES</div><div id="filesEditor"></div><button id="addCodeFile" type="button" class="btn ghost">＋ Tambah file kode</button><label>HTML Preview / Showcase<textarea id="fPreview" rows="7"></textarea></label><div class="form-grid"><label class="check-label"><input id="fPreviewable" type="checkbox"> Preview tersedia</label><label class="check-label"><input id="fRequiresBuild" type="checkbox"> Membutuhkan build</label></div></div>
               <div id="promptFields" class="hidden"><label>Source<input id="fSource"></label><label>Raw / Materi sumber<textarea id="fRaw" rows="6" placeholder="Konten sumber asli (opsional)"></textarea></label><label>Daftar prompts (satu prompt per blok, pisahkan dengan ---)<textarea id="fPrompts" rows="10" placeholder="Judul prompt (baris pertama)&#10;Isi prompt...&#10;---&#10;Prompt berikutnya..."></textarea></label><label>Count label<input id="fCountLabel"></label></div>
               <div class="media-box"><div class="section-heading">GAMBAR THUMBNAIL & PREVIEW</div><p class="editor-tip">Unggah JPG, PNG, atau WebP. Gambar otomatis dikonversi ke WebP sebelum dikirim ke repository privat. Maksimal 4 gambar per item.</p><input id="mediaFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="mediaPreview" class="media-preview"></div><div id="existingMedia" class="existing-media"></div></div>

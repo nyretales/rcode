@@ -30,3 +30,70 @@
  .list-footer .btn{width:100%;padding:13px}
  .list-panel .item-list{max-height:260px}
 }
+
+/* R•CODE visual editor refinement — match the dark emerald CMS theme */
+#editorArea .visual-editor,
+#editorArea .visual-editor *{box-sizing:border-box}
+#editorArea .visual-editor{padding:18px;gap:18px;background:transparent}
+#editorArea .visual-editor label{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  gap:8px!important;margin:0!important;padding:0!important;
+  color:#a9bbb0!important;font:600 10px/1.45 "DM Mono",monospace!important;
+  letter-spacing:.35px!important;text-transform:uppercase!important;
+}
+#editorArea .visual-editor .form-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+#editorArea .visual-editor input:not([type=checkbox]):not([type=file]),
+#editorArea .visual-editor select,
+#editorArea .visual-editor textarea{
+  display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  margin:0!important;padding:13px 14px!important;
+  color:#e4eee7!important;background:#0a1210!important;
+  border:1px solid #293b32!important;border-radius:10px!important;
+  font:13px/1.55 Manrope,sans-serif!important;letter-spacing:0!important;
+  text-transform:none!important;box-shadow:inset 0 1px 0 #ffffff05!important;
+}
+#editorArea .visual-editor input:not([type=checkbox]):not([type=file]){min-height:45px}
+#editorArea .visual-editor textarea{min-height:105px;resize:vertical}
+#editorArea .visual-editor textarea:focus,
+#editorArea .visual-editor input:focus,
+#editorArea .visual-editor select:focus{outline:none!important;border-color:#00cdb0!important;box-shadow:0 0 0 3px #00cdb01a!important}
+#editorArea .visual-editor input::placeholder,
+#editorArea .visual-editor textarea::placeholder{color:#65766c!important}
+#editorArea .visual-editor .section-heading{
+  padding-bottom:9px;border-bottom:1px solid #ffffff12;
+  color:#00cdb0;font:10px "DM Mono",monospace;letter-spacing:1.5px
+}
+#editorArea .visual-editor .media-box,
+#editorArea .visual-editor .code-file{
+  margin:0!important;padding:16px!important;border:1px solid #263a30!important;
+  border-radius:12px!important;background:linear-gradient(145deg,#101b16,#0b120f)!important
+}
+#editorArea .visual-editor .media-box input[type=file]{
+  display:block;width:100%;padding:13px;border:1px dashed #426354;border-radius:9px;
+  background:#0a1510;color:#9aafa2;font:11px Manrope
+}
+#editorArea .visual-editor .editor-tip{font:11px/1.65 Manrope;color:#81958a}
+#editorArea .visual-editor .check-label{
+  display:flex!important;flex-direction:row!important;align-items:center!important;gap:9px!important;
+  padding:12px!important;border:1px solid #263a30!important;border-radius:9px!important;
+  background:#0b1510!important;color:#b9c9bf!important
+}
+#editorArea .visual-editor input[type=checkbox]{accent-color:#00cdb0;width:17px;height:17px}
+#editorArea .visual-editor .btn{align-self:flex-start}
+#editorArea .visual-editor .advanced-json{
+  padding:14px!important;border:1px solid #263a30!important;border-radius:10px!important;
+  background:#0b1410!important;color:#9db0a4!important
+}
+#editorArea .visual-editor .advanced-json summary{font:10px "DM Mono";letter-spacing:.5px}
+#editorArea .visual-editor .advanced-json textarea{margin-top:13px!important}
+#editorArea .visual-editor .media-thumb{width:112px}
+#editorArea .visual-editor .media-thumb img{width:112px;height:84px;object-fit:cover}
+#editorArea .edit-actions{padding:15px 18px;background:#0c1411;border-top:1px solid #ffffff12}
+@media(max-width:560px){
+  #editorArea .visual-editor{padding:13px!important;gap:15px!important}
+  #editorArea .visual-editor .form-grid{grid-template-columns:1fr!important;gap:12px!important}
+  #editorArea .visual-editor input:not([type=checkbox]):not([type=file]),
+  #editorArea .visual-editor textarea{font-size:14px!important;padding:14px!important}
+  #editorArea .visual-editor .media-box{padding:13px!important}
+  #editorArea .edit-actions{padding:13px!important}
+}

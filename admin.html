@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/rcode-tokens.css">
-<link rel="stylesheet" href="assets/admin-cms.css">
+<link rel="stylesheet" href="assets/admin-cms.css?v=3">
 </head>
 <body>
 <div class="ambient"></div>
@@ -111,7 +111,7 @@
         <div class="bottom-bar"><span id="saveStatus" role="status" aria-live="polite">Terhubung ke CMS API.</span><button id="saveAllBtn" class="btn ghost" title="Gunakan setelah Import JSON. Untuk edit biasa cukup tombol Simpan perubahan">Terapkan seluruh katalog (setelah import) ↗</button></div>
       </section>
       <section class="content hidden" id="sitePanel">
-        <div class="content-head"><div><div class="eyebrow">CATALOG / 03</div><h2>Gambar Situs</h2><p>Unggah gambar untuk setiap slot di halaman utama. Slot yang masih kosong tetap menampilkan placeholder. Gambar otomatis dikonversi ke WebP dan tampil di situs dalam ±1 menit.</p></div></div>
+        <div class="content-head"><div><div class="eyebrow">CATALOG / 03</div><h2>Gambar Situs</h2><p>Unggah gambar untuk setiap slot di halaman utama. Slot yang belum diunggah memakai foto bawaan dari Unsplash dan otomatis tergantikan setelah Anda mengunggah. Gambar otomatis dikonversi ke WebP dan tampil di situs dalam ±1 menit.</p></div></div>
         <div id="siteGrid" class="site-grid"></div>
         <input id="siteFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
       </section>
@@ -119,5 +119,5 @@
     <footer>R•CODE CMS <span>·</span> Changes are committed to the private repository.</footer>
   </section>
 </main>
-<script src="assets/admin-cms.js"></script>
+<script src="assets/admin-cms.js?v=3"></script>
 </body></html>

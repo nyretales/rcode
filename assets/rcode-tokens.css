@@ -1,0 +1,107 @@
+/* ==========================================================================
+   R•CODE — Design tokens · Claymorphism (soft tosca + navy)  · V2.0
+   Dimuat PERTAMA-TAMA setelah styles-*.css di semua halaman (publik, library, admin).
+   File ini hanya mendefinisikan variabel + me-remap token bawaan template
+   (--paper, --ink, --brand, ...) supaya seluruh utility Tailwind ikut berubah warna.
+   ========================================================================== */
+:root{
+  /* ---------- Palet: soft tosca ---------- */
+  --tosca-50:#f1fbf9; --tosca-100:#e3f5f1; --tosca-200:#c6ede7; --tosca-300:#a4e1d9;
+  --tosca-400:#82d2c8; --tosca-500:#5dbdb1; --tosca-600:#3d9d93; --tosca-700:#2a7c75; --tosca-800:#1b6f69;
+  /* ---------- Palet: navy ---------- */
+  --navy-950:#0a1730; --navy-900:#10224a; --navy-800:#172d5c; --navy-700:#20407a; --navy-600:#2d5499;
+  --navy-300:#b9cbe3; --navy-muted:#3f5273;
+
+  /* ---------- Semantik (terang) ---------- */
+  --clay-bg:var(--tosca-100);            /* latar halaman */
+  --clay-surface:#eefaf8;                /* kartu/panel terang */
+  --clay-surface-2:var(--tosca-50);
+  --clay-text:var(--navy-900);           /* kontras 13.8:1 di atas --clay-bg */
+  --clay-text-muted:var(--navy-muted);   /* 7.0:1 */
+  --clay-accent-text:var(--tosca-800);   /* teal tua untuk teks kecil: 5.3:1 */
+  --clay-accent:var(--tosca-300);        /* permukaan tombol */
+  --clay-accent-strong:var(--tosca-400);
+  --clay-on-accent:var(--navy-900);      /* 10.6:1 di atas --tosca-300 */
+  --clay-danger:#b3261e; --clay-ok:#157a52; --clay-warn:#8a5a00;
+
+  /* ---------- Semantik (gelap / navy) ---------- */
+  --clay-dark-bg:var(--navy-900);
+  --clay-dark-surface:var(--navy-800);
+  --clay-dark-text:#f1fbf9;
+  --clay-dark-muted:var(--navy-300);     /* 8.1:1 di atas navy-800 */
+  --clay-dark-accent:#8fe6da;            /* 9.3:1 di atas navy-800 */
+
+  /* ---------- Radius ---------- */
+  --r-xs:10px; --r-sm:14px; --r-md:22px; --r-lg:30px; --r-xl:40px; --r-pill:999px;
+
+  /* ---------- Spacing (skala 4px) ---------- */
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem; --sp-6:2rem; --sp-7:3rem; --sp-8:4.5rem;
+
+  /* ---------- Border transparan + glass ---------- */
+  --border-glass:1px solid rgba(255,255,255,.7);
+  --border-soft:1px solid rgba(16,34,74,.10);
+  --border-dark:1px solid rgba(255,255,255,.14);
+  --glass-bg:rgba(238,250,248,.74);
+  --glass-bg-solid:rgba(238,250,248,.97);   /* fallback tanpa backdrop-filter */
+  --glass-dark-bg:rgba(23,45,92,.78);
+  --glass-dark-solid:rgba(23,45,92,.98);
+  --blur-glass:18px; --blur-strong:26px;
+
+  /* ---------- Shadow clay (terang) ---------- */
+  --sh-raised:12px 12px 26px rgba(16,34,74,.15), -9px -9px 20px rgba(255,255,255,.9), inset 3px 3px 7px rgba(255,255,255,.8), inset -4px -4px 9px rgba(42,124,117,.10);
+  --sh-raised-sm:7px 7px 15px rgba(16,34,74,.14), -5px -5px 12px rgba(255,255,255,.9), inset 2px 2px 5px rgba(255,255,255,.85), inset -3px -3px 6px rgba(42,124,117,.10);
+  --sh-hover:16px 18px 32px rgba(16,34,74,.18), -9px -9px 22px rgba(255,255,255,.95), inset 3px 3px 7px rgba(255,255,255,.85), inset -4px -4px 9px rgba(42,124,117,.10);
+  --sh-pressed:inset 6px 6px 12px rgba(16,34,74,.16), inset -5px -5px 10px rgba(255,255,255,.85);
+  --sh-inset:inset 5px 5px 11px rgba(16,34,74,.11), inset -5px -5px 10px rgba(255,255,255,.9);
+  /* ---------- Shadow clay (navy) ---------- */
+  --sh-dark:12px 14px 28px rgba(4,10,28,.45), -7px -7px 18px rgba(80,120,190,.16), inset 3px 3px 7px rgba(255,255,255,.12), inset -5px -5px 10px rgba(0,0,0,.28);
+  --sh-dark-hover:16px 20px 34px rgba(4,10,28,.5), -7px -7px 20px rgba(80,120,190,.22), inset 3px 3px 7px rgba(255,255,255,.16), inset -5px -5px 10px rgba(0,0,0,.28);
+
+  /* ---------- Fokus, gerak, tap target ---------- */
+  --focus-ring:3px solid var(--navy-600);
+  --focus-ring-dark:3px solid var(--tosca-300);
+  --focus-offset:3px;
+  --ease-clay:cubic-bezier(.3,.9,.3,1);
+  --dur-fast:.18s; --dur:.28s; --dur-slow:.5s;
+  --tap:44px;
+  --header-h:4.5rem; --header-h-compact:3.75rem;
+
+  /* ---------- Remap token bawaan template (Tailwind) ---------- */
+  --paper:var(--clay-bg);
+  --ink:var(--navy-900);
+  --background:var(--clay-bg);
+  --foreground:var(--navy-900);
+  --card:var(--clay-surface);
+  --card-foreground:var(--navy-900);
+  --primary:var(--navy-900);
+  --secondary:var(--tosca-200);
+  --muted:var(--tosca-200);
+  --muted-foreground:var(--navy-muted);
+  --border:rgba(16,34,74,.14);
+  --hairline:rgba(16,34,74,.10);
+  --input:rgba(16,34,74,.14);
+  --brand:var(--tosca-800);               /* teks aksen di atas latar terang */
+  --brand-foreground:var(--navy-900);
+  --ring:var(--navy-600);
+  --accent:var(--tosca-300);
+  --destructive:var(--clay-danger);
+  color-scheme:light;
+}
+
+/* Seksi gelap bawaan template (bg-foreground) = seksi navy. Aksen/teks diganti agar terbaca. */
+.bg-foreground{
+  --brand:var(--clay-dark-accent);
+  --muted-foreground:var(--clay-dark-muted);
+  --hairline:rgba(255,255,255,.12);
+}
+
+/* Fokus keyboard konsisten di seluruh situs */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:var(--focus-ring);outline-offset:var(--focus-offset);
+}
+.bg-foreground :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:var(--focus-ring-dark)}
+
+/* Hormati preferensi gerak */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important}
+}

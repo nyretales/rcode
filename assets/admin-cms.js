@@ -15,56 +15,70 @@ function renderList(){let q=$('#searchInput').value.trim().toLowerCase(),items=c
 function dirty(){state.dirty=true;$('#dirtyState').textContent='Belum disimpan';$('#dirtyState').classList.add('dirty');}
 function parsePromptBlocks(s){return s.split(/^\s*---\s*$/m).map(x=>x.trim()).filter(Boolean).map(block=>{let lines=block.split('\n');return {title:lines.shift().trim(),text:lines.join('\n').trim()}})}
 function promptBlocks(a){return (a||[]).map(p=>`${p.title||'Prompt'}\n${p.text||''}`).join('\n---\n')}
-
-function categories(){return [...new Set(current().map(x=>x.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
-function setCategoryChoice(value=''){
- const sel=$('#fCategorySelect');sel.innerHTML='<option value="">Pilih kategori…</option>'+categories().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')+'<option value="__new__">＋ Buat kategori baru</option>';
- if(value && categories().includes(value)){sel.value=value;$('#fCategoryNew').classList.add('hidden');}
- else if(value){sel.value='__new__';$('#fCategoryNew').classList.remove('hidden');$('#fCategoryNew').value=value;}
- else {sel.value='';$('#fCategoryNew').classList.add('hidden');$('#fCategoryNew').value='';}
+function categoryNames(){return [...new Set(current().map(x=>x.category).filter(Boolean))].sort((a,b)=>a.localeCompare(b));}
+function populateCategories(selected=''){
+ let sel=$('#fCategorySelect');sel.innerHTML='<option value="">Pilih kategori</option>'+categoryNames().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')+'<option value="__new__">＋ Buat kategori baru</option>';
+ if(selected&&!categoryNames().includes(selected)){sel.value='__new__';$('#newCategoryWrap').classList.remove('hidden');$('#fNewCategory').value=selected}else{sel.value=selected||''}
 }
-$('#fCategorySelect').addEventListener('change',()=>{const isNew=$('#fCategorySelect').value==='__new__';$('#fCategoryNew').classList.toggle('hidden',!isNew);if(isNew)$('#fCategoryNew').focus();dirty();});
-$('#fCategoryNew').addEventListener('input',dirty);
+function selectedCategory(){return $('#fCategorySelect').value==='__new__'?$('#fNewCategory').value.trim():$('#fCategorySelect').value}
+function makeUniqueId(title){let base=slug(title),id=base,n=2,ids=new Set(current().filter((x,i)=>i!==state.selected).map(x=>x.id));while(ids.has(id))id=base+'-'+n++;return id}
+function selectItem(i){
+ state.selected=i;let x=current()[i];state.media=Array.isArray(x.images)?[...x.images]:x.thumbnail?[x.thumbnail]:[];
+ $('#editorEmpty').classList.add('hidden');$('#editorArea').classList.remove('hidden');$('#editorTitle').textContent=titleOf(x);
+ $('#fId').value=x.id||'';$('#fTitle').value=x.title||'';
+ populateCategories(x.category||'');$('#fNewCategory').value='';$('#newCategoryWrap').classList.add('hidden');
+ $('#codeFields').classList.toggle('hidden',state.catalog!=='code');$('#promptFields').classList.toggle('hidden',state.catalog!=='prompt');
+ if(state.catalog==='code'){let htmlFile=(x.files||[]).find(f=>f.lang==='html')||(x.files||[])[0];$('#fCodeContent').value=htmlFile?.code||'';}
+ else $('#fPromptContent').value=(x.prompts||[]).map(p=>p.text||'').join('\n\n');
+ renderMedia();$('#itemEditor').value=JSON.stringify(x,null,2);state.dirty=false;$('#dirtyState').textContent='Editor siap';$('#dirtyState').classList.remove('dirty');renderList();
+}
 
-function selectItem(i){state.isNew=false;$('#editorArea').classList.remove('simple-new-item');state.selected=i;let x=current()[i];state.media=Array.isArray(x.images)?[...x.images]:x.thumbnail?[x.thumbnail]:[];state.files=Array.isArray(x.files)?JSON.parse(JSON.stringify(x.files)):[];$('#editorEmpty').classList.add('hidden');$('#editorArea').classList.remove('hidden');$('#editorTitle').textContent=titleOf(x);$('#simpleCodeFields').classList.add('hidden');$('#simplePromptFields').classList.add('hidden');$('#descriptionLabel').classList.remove('hidden');$('#mediaFiles').multiple=true;$('#fId').value=x.id||'';$('#fTitle').value=x.title||'';setCategoryChoice(x.category||'');$('#fCategoryIndex').value=x.categoryIndex||'';$('#fDescription').value=state.catalog==='code'?(x.description||''):(x.summary||'');$('#descriptionLabel').firstChild.textContent=state.catalog==='code'?'Deskripsi':'Ringkasan';$('#codeFields').classList.toggle('hidden',state.catalog!=='code');$('#promptFields').classList.toggle('hidden',state.catalog!=='prompt');$('#fPreview').value=x.preview||'';$('#fPreviewable').checked=!!x.previewable;$('#fRequiresBuild').checked=!!x.requiresBuild;$('#fSource').value=x.source||'';$('#fRaw').value=x.raw||'';$('#fPrompts').value=promptBlocks(x.prompts);$('#fCountLabel').value=x.countLabel||'';renderFiles();renderMedia();$('#itemEditor').value=JSON.stringify(x,null,2);state.dirty=false;$('#dirtyState').textContent='Editor siap';$('#dirtyState').classList.remove('dirty');renderList();}
 function renderFiles(){let host=$('#filesEditor');host.innerHTML=state.files.map((f,i)=>`<div class="code-file"><div class="form-grid"><label>Bahasa<select data-lang="${i}"><option ${f.lang==='html'?'selected':''}>html</option><option ${f.lang==='css'?'selected':''}>css</option><option ${f.lang==='js'?'selected':''}>js</option></select></label><label>Nama file<input data-filename="${i}" value="${esc(f.filename||'')}"></label></div><label>Isi kode<textarea data-code="${i}" rows="9">${esc(f.code||'')}</textarea></label><button type="button" class="btn danger" data-remove-file="${i}">Hapus file</button></div>`).join('');host.querySelectorAll('input,textarea,select').forEach(el=>el.addEventListener('input',()=>{let i=+(el.dataset.lang??el.dataset.filename??el.dataset.code);if(el.dataset.lang!==undefined)state.files[i].lang=el.value;if(el.dataset.filename!==undefined)state.files[i].filename=el.value;if(el.dataset.code!==undefined)state.files[i].code=el.value;dirty()}));host.querySelectorAll('[data-remove-file]').forEach(b=>b.onclick=()=>{state.files.splice(+b.dataset.removeFile,1);renderFiles();dirty()});}
 function renderMedia(){let host=$('#existingMedia');host.innerHTML=state.media.map((u,i)=>`<div class="media-thumb"><img src="${esc(u)}" alt="Media ${i+1}"><button type="button" data-remove-media="${i}">×</button><small>${i===0?'Gambar utama':'Gambar '+(i+1)}</small></div>`).join('');host.querySelectorAll('[data-remove-media]').forEach(b=>b.onclick=()=>{state.media.splice(+b.dataset.removeMedia,1);renderMedia();dirty()});}
 function slug(s){return String(s||'image').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,45)||'image'}
 async function toWebp(file){if(!file.type.startsWith('image/'))throw Error('File bukan gambar.');let bmp=await createImageBitmap(file);let scale=Math.min(1,2200/Math.max(bmp.width,bmp.height));let c=document.createElement('canvas');c.width=Math.round(bmp.width*scale);c.height=Math.round(bmp.height*scale);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);bmp.close();let blob=await new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(Error('Browser tidak dapat membuat WebP')), 'image/webp',.84));if(blob.size>3*1024*1024)throw Error('Gambar hasil konversi masih lebih dari 3 MB. Gunakan gambar lebih kecil.');return blob;}
-async function uploadMedia(file,index){let blob=await toWebp(file);let dataUrl=await new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(Error('Gagal membaca gambar'));r.readAsDataURL(blob)});let folder=state.catalog==='code'?'code-library':'prompt-library';let name=`${slug(current()[state.selected].id)}-${Date.now()}-${index+1}.webp`;let d=await api('/api/media/upload',{method:'POST',body:{path:`media/${folder}/${name}`,data:dataUrl,mimeType:'image/webp'}});return d.url||`${API}/${d.path}`;}
-function buildItem(){let old=current()[state.selected]||{};let category=($('#fCategorySelect').value==='__new__'?$('#fCategoryNew').value:$('#fCategorySelect').value).trim();let categoryIndex=(current().find(v=>v.category===category&&v.categoryIndex)?.categoryIndex)||String(Math.max(0,...current().map(v=>Number(v.categoryIndex)||0))+1);let x={...old,id:$('#fId').value.trim(),title:$('#fTitle').value.trim(),category,categoryIndex};if(state.catalog==='code'){if($('#editorArea').classList.contains('simple-new-item')){x.description='';x.files=[{lang:'html',filename:'index.html',code:$('#newCodeContent').value}];}else{x.description=$('#fDescription').value;x.files=state.files;}x.preview=$('#fPreview').value;x.previewable=$('#fPreviewable').checked;x.requiresBuild=$('#fRequiresBuild').checked;x.source=x.source||'R•CODE CMS';}else{if($('#editorArea').classList.contains('simple-new-item')){x.summary='';x.source='R•CODE CMS';x.raw='';x.prompts=[{title:$('#fTitle').value.trim(),text:$('#newPromptContent').value}];x.countLabel='1 prompt';}else{x.summary=$('#fDescription').value;x.source=$('#fSource').value;x.raw=$('#fRaw').value;x.prompts=parsePromptBlocks($('#fPrompts').value);x.countLabel=$('#fCountLabel').value||String(x.prompts.length)}}if(state.media.length){x.images=[...state.media];x.thumbnail=state.media[0]}else{delete x.images;delete x.thumbnail}return x;}
-async function saveCatalog(){try{if(state.selected!==null){let x=buildItem();if(!x.id||!x.title||!x.category)throw Error('Judul dan kategori wajib diisi.');if($('#editorArea').classList.contains('simple-new-item')){if(state.catalog==='code'&&!x.files[0].code.trim())throw Error('Isi code HTML belum diisi.');if(state.catalog==='prompt'&&!x.prompts[0].text.trim())throw Error('Isi prompt belum diisi.');}if(current().some((v,i)=>i!==state.selected&&v.id===x.id))throw Error('ID sudah digunakan item lain.');current()[state.selected]=x;}let ids=new Set();for(let x of current()){if(!x.id||!x.title)throw Error('Semua item wajib memiliki ID dan judul.');if(ids.has(x.id))throw Error('ID duplikat: '+x.id);ids.add(x.id)}status('Menyimpan katalog ke GitHub…');await api('/api/github/save',{method:'POST',body:{path:paths[state.catalog],content:JSON.stringify(current(),null,2),message:`CMS: Update ${titles[state.catalog]} (${current().length} items)`}});renderCounts();renderList();if(state.selected!==null)selectItem(state.selected);status('Katalog berhasil disimpan ke repository private.','ok');}catch(e){status(e.message,'error');alert('Belum berhasil disimpan: '+e.message)}}
-function newItem(){
- const n=current().length+1,now=Date.now();
- const x=state.catalog==='code'
- ?{id:`${slug($('#catalogTitle').textContent)}-${now}`,title:'',category:'',categoryIndex:'',description:'',files:[{lang:'html',filename:'index.html',code:''}],preview:'',previewable:true,requiresBuild:false,source:'R•CODE CMS'}
- :{id:`${slug($('#catalogTitle').textContent)}-${now}`,title:'',category:'',categoryIndex:'',summary:'',source:'R•CODE CMS',raw:'',prompts:[],countLabel:'1 prompt'};
- current().push(x);state.selected=current().length-1;state.isNew=true;
- selectItem(state.selected);$('#editorArea').classList.add('simple-new-item');
- $('#editorTitle').textContent=state.catalog==='code'?'Tambah Code Library':'Tambah Prompt Library';
- $('#fId').value=x.id;$('#fTitle').value='';setCategoryChoice('');
- $('#simpleCodeFields').classList.toggle('hidden',state.catalog!=='code');
- $('#simplePromptFields').classList.toggle('hidden',state.catalog!=='prompt');
- $('#codeFields').classList.add('hidden');$('#promptFields').classList.add('hidden');
- $('#descriptionLabel').classList.add('hidden');
- $('#newCodeContent').value='';$('#newPromptContent').value='';
- $('#mediaFiles').multiple=false;
- $('#itemEditor').value=JSON.stringify(x,null,2);
- status('Isi tiga bagian utama, lalu simpan.');
- $('#fTitle').focus();
+async function uploadMedia(file,index){
+ let blob=await toWebp(file);let dataUrl=await new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(Error('Gagal membaca gambar'));r.readAsDataURL(blob)});
+ let folder=state.catalog==='code'?'code-library':'prompt-library';let base=current()[state.selected]?.id||'new-item';
+ let name=`${slug(base)}-${Date.now()}-${index+1}.webp`;
+ let d=await api('/api/media/upload',{method:'POST',body:{path:`media/${folder}/${name}`,data:dataUrl,mimeType:'image/webp'}});
+ return d.url||`${API}/${d.path}`;
 }
+
+function buildItem(){
+ let old=current()[state.selected]||{},title=$('#fTitle').value.trim(),category=selectedCategory();
+ let id=old.id||makeUniqueId(title),categoryIndex=old.categoryIndex||String(current().filter(x=>x.category===category).length+1);
+ let x={...old,id,title,category,categoryIndex};
+ if(state.catalog==='code'){
+   let files=Array.isArray(old.files)?[...old.files]:[];
+   let htmlIndex=files.findIndex(f=>f.lang==='html');
+   let htmlEntry={lang:'html',filename:'index.html',code:$('#fCodeContent').value};
+   if(htmlIndex>=0)files[htmlIndex]={...files[htmlIndex],...htmlEntry};else files.unshift(htmlEntry);
+   x.files=files;x.description=old.description||'HTML component';x.preview=old.preview||'';x.previewable=old.previewable??true;x.requiresBuild=old.requiresBuild??false;x.source=old.source||'R•CODE CMS';
+ }else{
+   let body=$('#fPromptContent').value.trim();
+   x.summary=old.summary||body.slice(0,180);x.prompts=body?[{title:title||'Prompt',text:body}]:[];
+   x.countLabel=`${x.prompts.length} prompt`;x.source=old.source||'R•CODE CMS';x.raw=old.raw||'';
+ }
+ if(state.media.length){x.images=[...state.media];x.thumbnail=state.media[0]}else{delete x.images;delete x.thumbnail}
+ return x;
+}
+
+async function saveCatalog(){try{if(state.selected!==null){let x=buildItem();if(!x.title||!x.category)throw Error('Judul dan kategori wajib diisi.');if(state.catalog==='code'&&!x.files.some(f=>f.code.trim()))throw Error('Isi code HTML belum diisi.');if(state.catalog==='prompt'&&!x.prompts.length)throw Error('Isi prompt belum diisi.');if(current().some((v,i)=>i!==state.selected&&v.id===x.id))throw Error('ID sudah digunakan item lain.');current()[state.selected]=x;}let ids=new Set();for(let x of current()){if(!x.id||!x.title)throw Error('Semua item wajib memiliki ID dan judul.');if(ids.has(x.id))throw Error('ID duplikat: '+x.id);ids.add(x.id)}status('Menyimpan katalog ke GitHub…');await api('/api/github/save',{method:'POST',body:{path:paths[state.catalog],content:JSON.stringify(current(),null,2),message:`CMS: Update ${titles[state.catalog]} (${current().length} items)`}});renderCounts();renderList();if(state.selected!==null)selectItem(state.selected);status('Katalog berhasil disimpan ke repository private.','ok');}catch(e){status(e.message,'error');alert('Belum berhasil disimpan: '+e.message)}}
+function newItem(){
+ let n=current().length+1,x=state.catalog==='code'?{id:'',title:'',category:'',categoryIndex:'',description:'',files:[{lang:'html',filename:'index.html',code:''}],preview:'',previewable:true,requiresBuild:false,source:'R•CODE CMS'}:{id:'',title:'',category:'',categoryIndex:'',summary:'',source:'R•CODE CMS',raw:'',prompts:[],countLabel:'0 prompt'};
+ current().push(x);state.selected=current().length-1;renderCounts();selectItem(state.selected);$('#fTitle').focus();status('Isi judul, kategori, dan konten. ID serta metadata akan dibuat otomatis.');
+}
+
 function deleteItem(){if(state.selected===null)return;let x=current()[state.selected];if(!confirm(`Hapus "${titleOf(x)}"? Tekan Simpan untuk menerapkan perubahan.`))return;current().splice(state.selected,1);state.selected=null;$('#editorArea').classList.add('hidden');$('#editorEmpty').classList.remove('hidden');renderCounts();renderList();status('Item dihapus dari draft. Tekan Simpan seluruh katalog.');}
 function exportCatalog(){let b=new Blob([JSON.stringify(current(),null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=paths[state.catalog].split('/').pop();a.click();URL.revokeObjectURL(a.href)}
 async function importCatalog(file){try{let a=JSON.parse(await file.text());if(!Array.isArray(a)||!confirm(`Ganti seluruh katalog dengan ${a.length} item?`))return;state.data[state.catalog]=a;state.selected=null;$('#editorArea').classList.add('hidden');$('#editorEmpty').classList.remove('hidden');renderCounts();renderList();status('Import menjadi draft.')}catch(e){alert('Import gagal: '+e.message)}}
 $('#loginForm').addEventListener('submit',async e=>{e.preventDefault();let b=e.submitter;b.disabled=true;$('#loginMessage').textContent='Memverifikasi…';try{await login($('#password').value);$('#password').value='';$('#loginMessage').textContent=''}catch(err){$('#loginMessage').textContent=err.message;setConnection(false,'Login gagal')}finally{b.disabled=false}});
 $('#logoutBtn').onclick=logout;document.querySelectorAll('[data-catalog]').forEach(b=>b.onclick=()=>{state.catalog=b.dataset.catalog;state.selected=null;$('#catalogTitle').textContent=titles[state.catalog];$('#catalogDesc').textContent=labels[state.catalog];$('#catalogEyebrow').textContent=state.catalog==='code'?'CATALOG / 01':'CATALOG / 02';document.querySelectorAll('[data-catalog]').forEach(n=>n.classList.toggle('active',n===b));$('#editorArea').classList.add('hidden');$('#editorEmpty').classList.remove('hidden');$('#searchInput').value='';renderList()});
 $('#searchInput').oninput=renderList;$('#newItemBtn').onclick=()=>{newItem();$('#itemListPanel').classList.add('hidden');$('#listToggleBtn').setAttribute('aria-expanded','false');$('#listToggleHint').textContent='Buka untuk memilih atau mencari item';$('#editorArea').scrollIntoView({behavior:'smooth',block:'start'});};$('#listToggleBtn').onclick=()=>{let panel=$('#itemListPanel'),opening=panel.classList.contains('hidden');panel.classList.toggle('hidden',!opening);$('#listToggleBtn').setAttribute('aria-expanded',String(opening));$('#listToggleHint').textContent=opening?'Daftar sedang terbuka':'Buka untuk memilih atau mencari item';};$('#saveItemBtn').onclick=saveCatalog;$('#saveAllBtn').onclick=saveCatalog;$('#deleteBtn').onclick=deleteItem;$('#refreshBtn').onclick=()=>loadAll().catch(()=>{});$('#exportBtn').onclick=exportCatalog;$('#importBtn').onclick=()=>$('#importFile').click();$('#importFile').onchange=e=>{if(e.target.files[0])importCatalog(e.target.files[0]);e.target.value=''};
-['fId','fTitle','fCategory','fCategoryIndex','fDescription','fPreview','fSource','fRaw','fPrompts','fCountLabel','fPreviewable','fRequiresBuild'].forEach(id=>$('#'+id).addEventListener('input',dirty));$('#addCodeFile').onclick=()=>{state.files.push({lang:'html',filename:'new-file.html',code:''});renderFiles();dirty()};
-
-$('#htmlFileUpload').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;$('#newCodeContent').value=await f.text();dirty();e.target.value='';});
-$('#newCodeContent').addEventListener('input',dirty);
-$('#newPromptContent').addEventListener('input',dirty);
-
-$('#mediaFiles').onchange=async e=>{let files=[...e.target.files];e.target.value='';if(state.media.length+files.length>4){alert('Maksimal 4 gambar per item.');return}try{for(let i=0;i<files.length;i++){status(`Mengunggah gambar ${i+1}/${files.length}…`);let url=await uploadMedia(files[i],i);state.media.push(url);renderMedia()}dirty();status('Gambar berhasil diunggah sebagai WebP.','ok')}catch(err){status(err.message,'error');alert('Upload gambar gagal: '+err.message)}};
+['fTitle','fCodeContent','fPromptContent','fNewCategory'].forEach(id=>$('#'+id).addEventListener('input',dirty));
+$('#fCategorySelect').onchange=()=>{let isNew=$('#fCategorySelect').value==='__new__';$('#newCategoryWrap').classList.toggle('hidden',!isNew);if(isNew)$('#fNewCategory').focus();dirty()};
+$('#codeFileUpload').onchange=async e=>{let f=e.target.files[0];if(!f)return;$('#fCodeContent').value=await f.text();dirty();e.target.value='';};
+$('#mediaFiles').onchange=async e=>{let files=[...e.target.files];e.target.value='';if(files.length>1){alert('Unggah satu gambar preview untuk setiap item.');return}state.media=[];try{for(let i=0;i<files.length;i++){status(`Mengunggah gambar ${i+1}/${files.length}…`);let url=await uploadMedia(files[i],i);state.media.push(url);renderMedia()}dirty();status('Gambar berhasil diunggah sebagai WebP.','ok')}catch(err){status(err.message,'error');alert('Upload gambar gagal: '+err.message)}};
 (async()=>{try{let h=await api('/api/health',{auth:false});setConnection(!!h.success,'API online')}catch{setConnection(false,'API tidak terjangkau')}if(state.token){try{showDashboard();await loadAll()}catch{state.token='';sessionStorage.removeItem('rcode_cms_token');showLogin();$('#loginMessage').textContent='Sesi berakhir. Silakan login kembali.'}}else showLogin()})();
 })();

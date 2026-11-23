@@ -19,12 +19,18 @@ const SLOTS = [
   { key: 'free-prompts', label: 'Kartu Free Prompts', hint: 'Persegi 1:1', ratio: '1/1', def: 'assets/images/prompt-library-preview.webp' },
   { key: 'zonagreen', label: 'Kartu ZonaGreen Creative Lab', hint: 'Persegi 1:1', ratio: '1/1', def: 'assets/images/zonagreen-lab-preview.webp' },
   { key: 'experiments', label: 'Kartu Experiments & Projects', hint: 'Persegi 1:1', ratio: '1/1', def: 'assets/images/experiments-preview.webp' },
-  { key: 'content-1', label: 'ZonaGreen · Jersey Fundamentals & Workflow', hint: 'Lanskap 16:9', ratio: '16/9' },
-  { key: 'content-2', label: 'ZonaGreen · AI Prompt Library & Templates', hint: 'Lanskap 16:9', ratio: '16/9' },
-  { key: 'content-3', label: 'ZonaGreen · Production Ready Checklist', hint: 'Lanskap 16:9', ratio: '16/9' },
-  { key: 'content-4', label: 'Work in progress · Web Experiments', hint: 'Lanskap 16:9', ratio: '16/9' },
-  { key: 'content-5', label: 'Work in progress · Interface Studies', hint: 'Lanskap 16:9', ratio: '16/9' },
-  { key: 'content-6', label: 'Work in progress · Learning Notes', hint: 'Lanskap 16:9', ratio: '16/9' }
+  { key: 'code-1', label: "Free Code · Navbar & Bottom Navigation", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1762341119237-98df67c9c3c9?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'code-2', label: "Free Code · Glassmorphism & Clay UI", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1751601454754-68dce3c26795?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'code-3', label: "Free Code · Effects & Full Pages", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1584949091598-c31daaaa4aa9?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'prompt-1', label: "Free Prompts · Everyday AI Prompts", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1761322572550-967ea8c0bfd9?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'prompt-2', label: "Free Prompts · Study, Business & Code", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1759752393718-7b57f6da3caa?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'prompt-3', label: "Free Prompts · Image & Creative Prompts", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1548614239-54eff7340b6e?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-1', label: "ZonaGreen · Jersey Fundamentals & Workflow", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1718337799103-f1080ce21ba6?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-2', label: "ZonaGreen · AI Prompt Library & Templates", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1753162657546-fe4f94c65192?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-3', label: "ZonaGreen · Production Ready Checklist", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1773525911808-8a2cfd11cbc4?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-4', label: "Work in progress · Web Experiments", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-5', label: "Work in progress · Interface Studies", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1600132806608-231446b2e7af?auto=format&fit=crop&w=1000&q=70' },
+  { key: 'content-6', label: "Work in progress · Learning Notes", hint: 'Lanskap 16:9', ratio: '16/9', def: 'https://images.unsplash.com/photo-1772396867158-e26d9e6256b2?auto=format&fit=crop&w=1000&q=70' }
 ];
 
 function status(m, k = '') { $('#saveStatus').textContent = m; $('#saveStatus').style.color = k === 'error' ? '#ff9b91' : k === 'ok' ? '#5cd5a5' : ''; }
@@ -236,7 +242,7 @@ async function uploadWebp(file, folder, base) {
 function renderSite() {
   $('#siteGrid').innerHTML = SLOTS.map(s => {
     const custom = state.site[s.key], src = custom || s.def || '';
-    return `<div class="site-card"><div class="site-thumb" style="--ratio:${s.ratio}">${src ? `<img src="${esc(src)}" alt="" onerror="this.remove()">` : ''}<span>${custom ? '' : (s.def ? 'BAWAAN' : 'KOSONG')}</span></div><div><b>${esc(s.label)}</b><br><small>${esc(s.hint)} · ${custom ? 'gambar kustom' : s.def ? 'memakai gambar bawaan' : 'placeholder'}</small></div><div class="row"><button class="btn primary" data-site-up="${s.key}" type="button">${custom ? 'Ganti' : 'Unggah'}</button>${custom ? `<button class="btn danger" data-site-clear="${s.key}" type="button">${s.def ? 'Kembalikan bawaan' : 'Hapus'}</button>` : ''}</div></div>`;
+    return `<div class="site-card"><div class="site-thumb" style="--ratio:${s.ratio}">${src ? `<img src="${esc(src)}" alt="" onerror="this.remove()">` : ''}<span>${custom ? '' : (s.def ? 'BAWAAN' : 'KOSONG')}</span></div><div><b>${esc(s.label)}</b><br><small>${esc(s.hint)} · ${custom ? 'gambar kustom' : 'foto bawaan'}</small></div><div class="row"><button class="btn primary" data-site-up="${s.key}" type="button">${custom ? 'Ganti' : 'Unggah'}</button>${custom ? `<button class="btn danger" data-site-clear="${s.key}" type="button">${s.def ? 'Kembalikan bawaan' : 'Hapus'}</button>` : ''}</div></div>`;
   }).join('');
   document.querySelectorAll('[data-site-up]').forEach(b => b.onclick = () => { state.siteSlot = b.dataset.siteUp; $('#siteFile').click(); });
   document.querySelectorAll('[data-site-clear]').forEach(b => b.onclick = async () => {
